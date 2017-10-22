@@ -4,17 +4,17 @@ package ipo
 type System struct {
 	Inputs          []Input
 	Outputs         []Output
-	InputProcessor  InputProcessor
-	OutputProcessor OutputProcessor
+	InputProcessor  func(inputs []Input) (obj interface{}, err error)
+	OutputProcessor func(obj interface{}, outputs []Output) error
 }
 
 // Run runs the system once for the given data.
-func (system *System) Run(data interface{}) error {
-	obj, err := system.InputProcessor.Process(system.Inputs)
+func (system *System) Run() error {
+	obj, err := system.InputProcessor(system.Inputs)
 
 	if err != nil {
 		return err
 	}
 
-	return system.OutputProcessor.Process(obj, system.Outputs)
+	return system.OutputProcessor(obj, system.Outputs)
 }
