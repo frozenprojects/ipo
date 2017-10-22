@@ -8,7 +8,7 @@ type System struct {
 	OutputProcessor OutputProcessor
 }
 
-// Run ...
+// Run runs the system once for the given data.
 func (system *System) Run(data interface{}) error {
 	obj, err := system.InputProcessor.Process(system.Inputs)
 
