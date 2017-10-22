@@ -2,5 +2,5 @@ package ipo
 
 // Input represents a system that can fetch an object somewhere (e.g. from the network).
 type Input interface {
-	Read() (interface{}, error)
+	Read(data interface{}) (obj interface{}, err error)
 }
