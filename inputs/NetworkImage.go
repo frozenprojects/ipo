@@ -32,6 +32,6 @@ func (networkImage *NetworkImage) Read() (obj interface{}, err error) {
 		return nil, errors.New("Unexpected status code: " + strconv.Itoa(response.StatusCode()))
 	}
 
-	img, _, err := image.Decode(bytes.NewReader(response.BodyBytes()))
+	img, _, err := image.Decode(bytes.NewReader(response.Bytes()))
 	return img, err
 }
