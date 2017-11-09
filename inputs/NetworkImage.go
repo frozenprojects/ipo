@@ -65,6 +65,8 @@ func (networkImage *NetworkImage) Extension() string {
 		return ".png"
 	case "gif":
 		return ".gif"
+	case "webp":
+		return ".webp"
 	default:
 		return ""
 	}
