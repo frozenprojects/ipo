@@ -2,7 +2,6 @@ package outputs
 
 import (
 	"errors"
-	"fmt"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
@@ -41,10 +40,9 @@ func (file *ImageFile) Write(obj interface{}) error {
 
 	img := networkImage.Image()
 	width := img.Bounds().Dx()
-	height := img.Bounds().Dy()
 	resizeRequired := file.Size != 0 && file.Size < width
 
-	fmt.Println(file.BaseName+extension, "|", width, "x", height, "|", len(networkImage.Data())/1024, "KB")
+	// fmt.Println(file.BaseName+extension, "|", width, "x", height, "|", len(networkImage.Data())/1024, "KB")
 
 	// Original file output
 	if file.Format == "" && !resizeRequired {
