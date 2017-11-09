@@ -30,23 +30,23 @@ type ImageFile struct {
 
 // Write ...
 func (file *ImageFile) Write(obj interface{}) error {
-	networkImage := obj.(*inputs.NetworkImage)
-	extension := networkImage.Extension()
+	input := obj.(inputs.Image)
+	extension := input.Extension()
 
 	if extension == "" {
-		return errors.New("Unknown format: " + networkImage.Format())
+		return errors.New("Unknown format: " + input.Format())
 	}
 
-	img := networkImage.Image()
+	img := input.Image()
 	width := img.Bounds().Dx()
 	resizeRequired := file.Size != 0 && file.Size < width
 
-	// fmt.Println(file.BaseName+extension, "|", width, "x", height, "|", len(networkImage.Data())/1024, "KB")
+	// fmt.Println(file.BaseName+extension, "|", width, "x", height, "|", len(input.Data())/1024, "KB")
 
 	// Original file output
 	if file.Format == "" && !resizeRequired {
 		fullPath := path.Join(file.Directory, file.BaseName+extension)
-		return ioutil.WriteFile(fullPath, networkImage.Data(), 0644)
+		return ioutil.WriteFile(fullPath, input.Data(), 0644)
 	}
 
 	// Resize if needed
@@ -56,7 +56,7 @@ func (file *ImageFile) Write(obj interface{}) error {
 
 	// Set format automatically if needed
 	if file.Format == "" {
-		file.Format = networkImage.Format()
+		file.Format = input.Format()
 	}
 
 	// Write data to file

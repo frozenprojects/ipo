@@ -12,8 +12,11 @@ import (
 	"github.com/aerogo/http/client"
 )
 
-// Force interface implementation
-var _ ipo.Input = (*NetworkImage)(nil)
+// Force interface implementations
+var (
+	_ Image     = (*NetworkImage)(nil)
+	_ ipo.Input = (*NetworkImage)(nil)
+)
 
 // NetworkImage fetches an image from a URL.
 type NetworkImage struct {
