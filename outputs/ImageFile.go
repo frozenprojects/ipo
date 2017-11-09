@@ -31,7 +31,6 @@ type ImageFile struct {
 // Write ...
 func (file *ImageFile) Write(obj interface{}) error {
 	networkImage := obj.(*inputs.NetworkImage)
-
 	extension := networkImage.Extension()
 
 	if extension == "" {
