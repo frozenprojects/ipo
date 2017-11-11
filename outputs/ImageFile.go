@@ -21,7 +21,7 @@ import (
 var _ ipo.Output = (*ImageFile)(nil)
 
 // The threshold where we start seeing 2 aspect ratios as different
-const aspectRatioThreshold = 0.01
+const aspectRatioThreshold = 0.03
 
 // ImageFile writes an image to the filesystem.
 type ImageFile struct {
