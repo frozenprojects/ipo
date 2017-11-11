@@ -6,6 +6,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io/ioutil"
+	"math"
 	"os"
 	"path"
 
@@ -18,6 +19,9 @@ import (
 
 // Force interface implementation
 var _ ipo.Output = (*ImageFile)(nil)
+
+// The threshold where we start seeing 2 aspect ratios as different
+const aspectRatioThreshold = 0.01
 
 // ImageFile writes an image to the filesystem.
 type ImageFile struct {
@@ -65,8 +69,11 @@ func (file *ImageFile) Write(obj interface{}) error {
 			// Take required aspect ratio
 			requiredAspectRatio := float64(file.Width) / float64(file.Height)
 
-			// If the original image has more width information, resize by height
-			if aspectRatio > requiredAspectRatio {
+			// Decide what to do depending on the aspect ratio differences
+			if math.Abs(aspectRatio-requiredAspectRatio) <= aspectRatioThreshold {
+				newWidth = uint(file.Width)
+				newHeight = uint(file.Height)
+			} else if aspectRatio > requiredAspectRatio {
 				newHeight = uint(file.Height)
 			} else {
 				newWidth = uint(file.Width)
