@@ -21,7 +21,7 @@ import (
 var _ ipo.Output = (*ImageFile)(nil)
 
 // The threshold where we start seeing 2 aspect ratios as different
-const aspectRatioThreshold = 0.03
+const aspectRatioThreshold = 0.02
 
 // ImageFile writes an image to the filesystem.
 type ImageFile struct {
@@ -44,7 +44,7 @@ func (file *ImageFile) Write(obj interface{}) error {
 
 	img := input.Image()
 	width := img.Bounds().Dx()
-	height := img.Bounds().Dx()
+	height := img.Bounds().Dy()
 	resizeXRequired := file.Width != 0 && file.Width < width
 	resizeYRequired := file.Height != 0 && file.Height < height
 	resizeRequired := resizeXRequired || resizeYRequired
