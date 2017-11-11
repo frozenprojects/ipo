@@ -24,7 +24,8 @@ type ImageFile struct {
 	Directory string
 	BaseName  string
 	Format    string
-	Size      int
+	Width     int
+	Height    int
 	Quality   int
 }
 
@@ -39,7 +40,10 @@ func (file *ImageFile) Write(obj interface{}) error {
 
 	img := input.Image()
 	width := img.Bounds().Dx()
-	resizeRequired := file.Size != 0 && file.Size < width
+	height := img.Bounds().Dx()
+	resizeXRequired := file.Width != 0 && file.Width < width
+	resizeYRequired := file.Height != 0 && file.Height < height
+	resizeRequired := resizeXRequired || resizeYRequired
 
 	// fmt.Println(file.BaseName+extension, "|", width, "x", height, "|", len(input.Data())/1024, "KB")
 
@@ -51,7 +55,28 @@ func (file *ImageFile) Write(obj interface{}) error {
 
 	// Resize if needed
 	if resizeRequired {
-		img = resize.Resize(uint(file.Size), 0, img, resize.Lanczos3)
+		newWidth := uint(0)
+		newHeight := uint(0)
+
+		if file.Width != 0 && file.Height != 0 {
+			// Take aspect ratio of original image
+			aspectRatio := float64(width) / float64(height)
+
+			// Take required aspect ratio
+			requiredAspectRatio := float64(file.Width) / float64(file.Height)
+
+			// If the original image has more width information, resize by height
+			if aspectRatio > requiredAspectRatio {
+				newHeight = uint(file.Height)
+			} else {
+				newWidth = uint(file.Width)
+			}
+		} else {
+			newWidth = uint(file.Width)
+			newHeight = uint(file.Height)
+		}
+
+		img = resize.Resize(newWidth, newHeight, img, resize.Lanczos3)
 	}
 
 	// Set format automatically if needed
